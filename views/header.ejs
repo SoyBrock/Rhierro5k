@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Conexión MySQL y Nodejs">
+    <title>Conexión MySQL y Nodejs</title>
+    <!-- Cargar el CSS de Boostrap-->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+    <!-- Cargar estilos propios -->
+    <link href="/stylesheets/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Definición del menú -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="">Node JS y MySQL</a>
+        <button aria-label="Mostrar u ocultar menú" class="navbar-toggler" id="botonMenu" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menu">
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/productos">Listar Productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/clientes">Listar Clientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/proveedor">Listar Proveedor</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/productos/agregar">Agregar Productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/clientes/agregar">Agregar Clientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/proveedor/agregar">Agregar Proveedor</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <script type="text/javascript">
+        // Tomado de https://github.com/parzibyte/cotizaciones_web/blob/master/js/cotizaciones.js#L2
+        document.addEventListener("DOMContentLoaded", () => {
+            const menu = document.querySelector("#menu"),
+                botonMenu = document.querySelector("#botonMenu");
+            if (menu) {
+                botonMenu.addEventListener("click", () => menu.classList.toggle("show"));
+            }
+        });
+    </script>
+    <!-- Termina la definición del menú -->
+    <main role="main" class="container">
+        <div class="row">

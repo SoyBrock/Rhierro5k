@@ -1,0 +1,37 @@
+<%- include("../header"); %>
+<div class="col-12">
+    <h1>Proveedor</h1>
+    <a href="/proveedor/agregar" class="btn btn-primary mb-2">Agregar</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Rif</th>
+                <th>Empresa</th>
+                <th>Direcci&oacute;n</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% proveedor.forEach(proveedor => { %>
+            <tr>
+                <td><%= proveedor.rif %></td>
+                <td><%= proveedor.empresa %></td>
+                <td><%= proveedor.direccion %></td>
+
+                <td>
+                    <a href="/proveedor/editar/<%= proveedor.id %>" class="btn btn-warning">
+                        Editar
+                    </a>
+                </td>
+                <td>
+                    <a href="/proveedor/eliminar/<%= proveedor.id %>" class="btn btn-danger">
+                        Eliminar
+                    </a>
+                </td>
+            </tr>
+            <% })%>
+        </tbody>
+    </table>
+</div>
+<%- include("../footer"); %>

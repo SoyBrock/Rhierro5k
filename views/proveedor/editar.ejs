@@ -1,0 +1,28 @@
+<%- include("../header"); %>
+<div class="col-12">
+    <h1>Editar Proveedor</h1>
+    <form method="post" action="/proveedor/actualizar">
+
+        <input value="<%= proveedor.id %>" name="id" type="hidden">
+        <div class="form-group">
+            <label for="rif">rif</label>
+            <input value="<%= proveedor.rif %>" required id="rif" placeholder="rif de la empresa"
+                class="form-control" type="text" name="rif">
+        </div>
+        <div class="form-group">
+            <label for="empresa">empresa</label>
+            <input value="<%= proveedor.empresa%>" required id="empresa" placeholder="Nombre de la Empresa"
+                class="form-control" type="text" name="empresa">
+        </div>
+        <div class="form-group">
+            <label for="Direccion">Direccici&oacute;n</label>
+            <input value="<%= proveedor.direccion %>" required id="direccion" placeholder="Direccion de la Empresa"
+                class="form-control" type="text" name="direccion">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-success">Guardar</button>
+            &nbsp;<a href="/proveedor" class="btn btn-primary">Volver</a>
+        </div>
+    </form>
+</div>
+<%- include("../footer"); %>
