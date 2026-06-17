@@ -1,4 +1,4 @@
-const Jimp = require('jimp');
+const { Jimp } = require('jimp');
 
 /**
  * Leomar: Procesa y valida una imagen de hierro.
@@ -16,8 +16,8 @@ async function processAndValidateImage(imagePath) {
 
   // Reniel: Redimensionamos y pasamos a escala de grises.
   const processed = image.clone()
-    .resize(256, 256)
-    .grayscale();
+    .resize({ w: 256, h: 256 })
+    .greyscale();
 
   // Leomar: Binarizamos usando luminancia media.
   const data = processed.bitmap.data;
@@ -73,12 +73,7 @@ async function generateDiffImage(img1, img2) {
   const len = data1.length;
 
   // Reniel: Creamos lienzo blanco base para pintar la diferencia.
-  const diffImg = await new Promise((resolve, reject) => {
-    new Jimp(256, 256, 0xFFFFFFFF, (err, image) => {
-      if (err) reject(err);
-      else resolve(image);
-    });
-  });
+  const diffImg = new Jimp({ width: 256, height: 256, color: 0xFFFFFFFF });
 
   const diffData = diffImg.bitmap.data;
 
@@ -113,7 +108,7 @@ async function generateDiffImage(img1, img2) {
     }
   }
 
-  return diffImg.getBase64Async(Jimp.MIME_PNG);
+  return diffImg.getBase64("image/png");
 }
 
 module.exports = {

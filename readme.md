@@ -130,25 +130,94 @@ CREATE TABLE IF NOT EXISTS usuarios (
     password VARCHAR(60) NOT NULL
 );
 
--- 4. Semillas de Datos Geográficos de Prueba (Venezuela)
+-- 4. Semillas de Datos Geográficos de Prueba (Venezuela Completa)
 
 INSERT INTO estados (id, nombre, codigo) VALUES 
 (1, 'Zulia', 'ZUL'),
 (2, 'Lara', 'LAR'),
-(3, 'Falcón', 'FAL');
+(3, 'Falcón', 'FAL'),
+(4, 'Amazonas', 'AMA'),
+(5, 'Anzoátegui', 'ANZ'),
+(6, 'Apure', 'APU'),
+(7, 'Aragua', 'ARA'),
+(8, 'Barinas', 'BAR'),
+(9, 'Bolívar', 'BOL'),
+(10, 'Carabobo', 'CAR'),
+(11, 'Cojedes', 'COJ'),
+(12, 'Delta Amacuro', 'DEL'),
+(13, 'Distrito Capital', 'DCA'),
+(14, 'Guárico', 'GUA'),
+(15, 'Mérida', 'MER'),
+(16, 'Miranda', 'MIR'),
+(17, 'Monagas', 'MON'),
+(18, 'Nueva Esparta', 'NES'),
+(19, 'Portuguesa', 'POR'),
+(20, 'Sucre', 'SUC'),
+(21, 'Táchira', 'TAC'),
+(22, 'Trujillo', 'TRU'),
+(23, 'La Guaira', 'LGU'),
+(24, 'Yaracuy', 'YAR'),
+(25, 'Dependencias Federales', 'DFE')
+ON DUPLICATE KEY UPDATE nombre=VALUES(nombre), codigo=VALUES(codigo);
 
 INSERT INTO municipios (id, estado_id, nombre) VALUES 
 (1, 1, 'Maracaibo'),
 (2, 1, 'San Francisco'),
 (3, 2, 'Iribarren'),
-(4, 3, 'Miranda');
+(4, 3, 'Miranda'),
+(5, 4, 'Atures'),
+(6, 5, 'Simón Bolívar'),
+(7, 6, 'San Fernando'),
+(8, 7, 'Girardot'),
+(9, 8, 'Barinas'),
+(10, 9, 'Angostura del Orinoco'),
+(11, 10, 'Valencia'),
+(12, 11, 'Ezequiel Zamora'),
+(13, 12, 'Tucupita'),
+(14, 13, 'Libertador'),
+(15, 14, 'Juan Germán Roscio'),
+(16, 15, 'Libertador'),
+(17, 16, 'Guaicaipuro'),
+(18, 17, 'Maturín'),
+(19, 18, 'Arismendi'),
+(20, 19, 'Guanare'),
+(21, 20, 'Sucre'),
+(22, 21, 'San Cristóbal'),
+(23, 22, 'Trujillo'),
+(24, 23, 'Vargas'),
+(25, 24, 'San Felipe'),
+(26, 25, 'Dependencias Federales')
+ON DUPLICATE KEY UPDATE estado_id=VALUES(estado_id), nombre=VALUES(nombre);
 
 INSERT INTO parroquias (id, municipio_id, nombre) VALUES 
 (1, 1, 'Olegario Villalobos'),
 (2, 1, 'Juana de Ávila'),
 (3, 2, 'San Francisco'),
 (4, 3, 'Catedral'),
-(5, 4, 'Santa Ana');
+(5, 4, 'Santa Ana'),
+(6, 5, 'Fernando Girón Tovar'),
+(7, 6, 'El Carmen'),
+(8, 7, 'San Fernando'),
+(9, 8, 'Joaquín Crespo'),
+(10, 9, 'Barinas'),
+(11, 10, 'Catedral'),
+(12, 11, 'San José'),
+(13, 12, 'San Carlos'),
+(14, 13, 'José Vidal Marcano'),
+(15, 14, 'Catedral'),
+(16, 15, 'San Juan de los Morros'),
+(17, 16, 'Milla'),
+(18, 17, 'Los Teques'),
+(19, 18, 'San Simón'),
+(20, 19, 'La Asunción'),
+(21, 20, 'Guanare'),
+(22, 21, 'Altagracia'),
+(23, 22, 'San Juan Bautista'),
+(24, 23, 'Chiquinquirá'),
+(25, 24, 'La Guaira'),
+(26, 25, 'San Felipe'),
+(27, 26, 'Dependencias Federales')
+ON DUPLICATE KEY UPDATE municipio_id=VALUES(municipio_id), nombre=VALUES(nombre);
 ```
 
 ---

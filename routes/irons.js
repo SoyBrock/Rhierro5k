@@ -103,37 +103,32 @@ router.post('/validate', uploadMiddleware, (req, res) => {
       return Promise.all(comparisons);
     })
     .then(results => {
-      let highestSimilarity = 0;
-      let conflictIron = null;
-      let conflictProcessed = null;
+      const validResults = results.filter(r => r !== null);
+      validResults.sort((a, b) => b.similarity - a.similarity);
 
-      results.forEach(resVal => {
-        if (resVal && resVal.similarity > highestSimilarity) {
-          highestSimilarity = resVal.similarity;
-          conflictIron = resVal.iron;
-          conflictProcessed = resVal.existingProcessed;
-        }
-      });
-
-      const similarityPercentage = Math.round(highestSimilarity * 100);
+      const highestSimilarity = validResults.length > 0 ? validResults[0].similarity : 0;
       const accepted = highestSimilarity < THRESHOLD;
+      const similarityPercentage = Math.round(highestSimilarity * 100);
 
       const response = {
         accepted,
         similarityScore: similarityPercentage,
         threshold: Math.round(THRESHOLD * 100),
-        tempFileName: req.file.filename
+        tempFileName: req.file.filename,
+        similarIrons: []
       };
 
-      if (!accepted && conflictIron && conflictProcessed) {
-        // Leomar: Generación del heatmap del solapamiento.
-        generateDiffImage(newProcessed, conflictProcessed)
+      const topMatches = validResults.slice(0, 5);
+
+      const diffPromises = topMatches.map(match => {
+        return generateDiffImage(newProcessed, match.existingProcessed)
           .then(diffBase64 => {
-            response.conflict = {
-              productor: conflictIron.productor_nombre,
-              marca: conflictIron.marca_nombre,
-              codigo: conflictIron.hierro_codigo,
-              imagenUrl: conflictIron.hierro_imagen_url,
+            return {
+              productor: match.iron.productor_nombre,
+              marca: match.iron.marca_nombre,
+              codigo: match.iron.hierro_codigo,
+              imagenUrl: match.iron.hierro_imagen_url,
+              similarityScore: Math.round(match.similarity * 100),
               diffImage: diffBase64,
               consejos: [
                 'Rotar el diseño 45° o 90° para cambiar la orientación de las figuras.',
@@ -142,20 +137,24 @@ router.post('/validate', uploadMiddleware, (req, res) => {
                 'Añadir una barra horizontal inferior ("marca de barra") o una estrella.'
               ]
             };
-
-            // Reniel: Limpiar archivo si la propuesta entra en conflicto.
-            if (fs.existsSync(tempPath)) fs.unlinkSync(tempPath);
-            return res.status(200).json(response);
-          })
-          .catch(err => {
-            console.error('Error generando mapa de diferencias:', err);
-            if (fs.existsSync(tempPath)) fs.unlinkSync(tempPath);
-            return res.status(500).json({ error: 'Error al generar el mapa de calor de similitudes.' });
           });
-      } else {
-        // Aceptado
-        return res.status(200).json(response);
-      }
+      });
+
+      return Promise.all(diffPromises)
+        .then(similarIrons => {
+          response.similarIrons = similarIrons;
+
+          if (!accepted) {
+            if (fs.existsSync(tempPath)) fs.unlinkSync(tempPath);
+          }
+
+          return res.status(200).json(response);
+        })
+        .catch(err => {
+          console.error('Error generando mapas de diferencias:', err);
+          if (fs.existsSync(tempPath)) fs.unlinkSync(tempPath);
+          return res.status(500).json({ error: 'Error al generar el mapa de calor de similitudes.' });
+        });
     })
     .catch(err => {
       console.error('Error al validar similitud del hierro:', err);

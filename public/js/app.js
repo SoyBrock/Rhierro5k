@@ -575,21 +575,54 @@ function initCanvas() {
       document.getElementById('modal-img-proposed').src = filePreviewImg.src;
     }
 
-    document.getElementById('modal-img-conflict').src = `/${data.conflict.imagenUrl}`;
-    document.getElementById('modal-conflict-producer').textContent = `Productor: ${data.conflict.productor}`;
-    document.getElementById('modal-conflict-brand').textContent = `Marca: ${data.conflict.marca}`;
-    document.getElementById('modal-conflict-code').textContent = `Código: ${data.conflict.codigo}`;
-    document.getElementById('modal-img-diff').src = data.conflict.diffImage;
+    const similarList = document.getElementById('modal-similar-list');
+    similarList.innerHTML = '';
+
+    if (data.similarIrons && data.similarIrons.length > 0) {
+      data.similarIrons.forEach((iron, index) => {
+        const card = document.createElement('div');
+        card.className = `similar-iron-card ${index === 0 ? 'selected' : ''}`;
+        card.innerHTML = `
+          <div class="similar-iron-img-preview">
+            <img src="/${iron.imagenUrl}" alt="Hierro">
+          </div>
+          <div class="similar-iron-meta">
+            <strong>${escapeHtml(iron.marca)}</strong>
+            <span>${escapeHtml(iron.productor)}</span>
+          </div>
+          <div class="similar-iron-score">${iron.similarityScore}%</div>
+        `;
+
+        card.addEventListener('click', () => {
+          document.querySelectorAll('.similar-iron-card').forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          updateComparisonBoard(iron);
+        });
+
+        similarList.appendChild(card);
+      });
+
+      // Seleccionar el primero por defecto
+      updateComparisonBoard(data.similarIrons[0]);
+    }
+
+    modal.classList.add('open');
+  }
+
+  function updateComparisonBoard(iron) {
+    document.getElementById('modal-img-conflict').src = `/${iron.imagenUrl}`;
+    document.getElementById('modal-conflict-producer').textContent = `Productor: ${iron.productor}`;
+    document.getElementById('modal-conflict-brand').textContent = `Marca: ${iron.marca}`;
+    document.getElementById('modal-conflict-code').textContent = `Código: ${iron.codigo}`;
+    document.getElementById('modal-img-diff').src = iron.diffImage;
 
     const sugList = document.getElementById('modal-suggestions-list');
     sugList.innerHTML = '';
-    data.conflict.consejos.forEach(c => {
+    iron.consejos.forEach(c => {
       const li = document.createElement('li');
       li.textContent = c;
       sugList.appendChild(li);
     });
-
-    modal.classList.add('open');
   }
 
   function closeModal() {
