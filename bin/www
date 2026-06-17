@@ -85,4 +85,9 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  if (typeof addr !== 'string') {
+    console.log('Servidor corriendo en: http://localhost:' + addr.port);
+  } else {
+    console.log('Servidor corriendo en: ' + bind);
+  }
 }
